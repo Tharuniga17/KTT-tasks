@@ -2,23 +2,25 @@
 <html lang = "en">
     <head>
         <style>
-            
-            td,tr,th{
-                border: 1px solid black;
-                text-align: center;
-                border-style: none;
-                
-            }
-            table{
-                border-spacing: 20px;
-            }
-            
+        table,
+        tr,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            padding: 10px;
+            border-style: none;
+        }
+        tr:first-child{
+            background-color: violet;
+        }
         </style>
     </head>
     <body>
         <table>
             <caption>Calender 2026</caption>
-            <tr style="background-color: blue;">
+            <tr>
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
@@ -27,12 +29,11 @@
                 <th>Sat</th>
             </tr>
             <tr>
-                <td>1</td>
+                <td colspan="3"></td>
                 <td>2</td>
                 <td>3</td>
                 <td>4</td>
-                <td>5</td>
-                <td>6</td>
+                
 
             </tr>
             <tr>
