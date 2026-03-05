@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            li{
+                list-style-type: square;
+        
+            }
+            ul{
+                margin: 0;
+            }
+            .one li{
+                
+                list-style-type: none;
+                word-break: 3px;
+                display: block;
+                text-align: center;
+                padding: 17px;
+                float: left;
+                background-color: blanchedalmond;  
+            }
+            .one li:hover{
+                background-color: aquamarine;
+            }
+            
+        </style>
+
+    </head>
+    <body>
+        <ul>
+            <li>one</li>
+            <li>two</li>
+            <li>Three</li>
+        </ul>
+        <hr>
+        <ul>
+            <li>Coffee</li>
+            <li>Tea
+                <ul>
+                    <li>Blacktea</li>
+                    <li>Green tea</li>
+                </ul>
+            </li>
+            <li>Milk</li>
+        </ul>
+        <hr>
+        <ul class="one" style="display: flex;">
+            <li>home</li>
+            <li>about</li>
+            <li>news</li>
+
+        </ul>
+    </body>
+</html>
