@@ -1,0 +1,32 @@
+body{
+    background-image: url(smiley.gif);
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-attachment: scroll;
+
+}
+
+
+div{
+ 
+  padding: 20px;
+  border: 5px solid black;
+  max-width: 400px;
+  box-sizing: border-box;
+  outline-width: medium;
+}
+#two{
+    margin-left: inherit;
+}
+h1{
+    margin-left: inherit;
+    text-transform: uppercase;
+    text-shadow: 2px 2px;
+}
+.three{
+    border: 1px solid black;
+    outline: 3px solid red;
+    outline-offset: 15px;
+    text-align: justify;
+}

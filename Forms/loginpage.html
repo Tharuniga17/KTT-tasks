@@ -4,23 +4,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             .one{
-                border: 1px solid black;
-                border-radius: 2px;
-                width: 50%;
-                height:50%;
-                align-items: center;
-                
+                box-shadow: 5px 10px 10px silver;
+                border-radius: 6px;
+                width: 350px;
+                height:300px;
+                align-items: center;  
+                line-height: 25px;
+                margin:80px auto;
+            }
+            .two{
+                width: 250px;
+                height: 40px;
+                margin-top: 70px;
+                margin-left: 60px;
+            }
+            .three{
+                text-align: center;
+                margin-top: 10px;
             }
         </style>
     </head>
     <body>
         <div class="one">
-            <div>
+            <div class="two">
+                <p class="three" style="color: green;font-family: Georgia, 'Times New Roman', Times, serif;font-size: larger;padding-top: 30px;">Geeks For Geeks</p>
+                <p class="three" style="color: black;font-family: Arial, Helvetica, sans-serif;font-weight: bold;">Enter your login credentials</p>
                 <form>
+                    
                     <label for="fname">UserName:</label><br>
-                    <input type="text" id="fname" name="fname"><br>
+                    <input type="text" id="fname" name="fname" style="width: 200px;"><br>
                     <label for="fpassword">Password</label><br>
-                    <input type="password" id="fname" name="fname">
+                    <input type="password" id="fname" name="fname" style="width:200px"><br>
+                    <button style="width: 200px;margin-top: 20px;padding: 10px;background-color: green;border-radius: 3px;color: white;">Submit</button>
                 </form>
             </div>
 
