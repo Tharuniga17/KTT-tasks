@@ -1,0 +1,46 @@
+body {
+  background: #f5f6fa;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+table.dataTable thead th {
+  font-size: 14px;
+  background: #f1f3f5;
+  white-space: nowrap;
+  text-align: center;
+}
+
+table.dataTable tbody td {
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+#fuelTable {
+  width: 100% !important;
+}
+
+.btn-danger {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btn-light {
+  padding: 4px 10px;
+  font-size: 12px;
+  background: #f8f9fa;
+}
+
+.dataTables_wrapper {
+  margin-top: 15px;
+}
+
+label {
+  font-weight: 500;
+}
+
