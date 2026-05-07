@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
         console.log("BODY:", req.body);
 
         await FuelEntry.create({
-            date: req.body.STRING,
+            date: req.body.date,
 
             odometer: Number(req.body.odometer),
             liters: Number(req.body.liters),

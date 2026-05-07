@@ -4,7 +4,7 @@ import sequelize from "../config/db.js";
 const FuelEntry = sequelize.define("FuelEntry", {
 
   date: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATE,
     allowNull: false
   },
 
