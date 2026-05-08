@@ -6,7 +6,7 @@ link(rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.boo
 link(rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css")
 link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css")
 
-// ================= STYLE =================
+
 style.
   .dataTables_wrapper .dataTables_length{
     float:left;
@@ -28,7 +28,21 @@ style.
   table.dataTable tbody td{
     vertical-align:middle;
   }
+    .dt-center-buttons {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
 
+    /* Remove background colors */
+    .dt-button {
+      background: none !important;
+      border: 1px solid #ccc !important;
+      color: #000 !important;
+      padding: 6px 15px !important;
+      border-radius: 6px !important;
+    }
 
 // ================= PAGE =================
 .container-fluid.mt-3
@@ -37,11 +51,11 @@ style.
 
     .col-md-5
       label.form-label Start Date
-      input.form-control#startDate(type="date")
+      input#startDate.form-control(type="date")
 
     .col-md-5
       label.form-label End Date
-      input.form-control#endDate(type="date")
+      input#endDate.form-control(type="date")
 
     .col-md-2.text-end
       button.btn.btn-warning.w-100(
@@ -75,8 +89,8 @@ style.
           td.text-center= item.liters || 0
           td.text-center= item.amount || 0
           td.text-center= item.pricePerLiter || 0
-          td.text-center "-"
-          td.text-center= item.mileage || ""
+          td.text-center n
+          td.text-center= item.mileage || 0
           td= item.note || "-"
 
           td.text-center
@@ -85,8 +99,20 @@ style.
               data-bs-target=`#edit${item.id}`
             ) Edit
 
-            form(action=`/delete/${item.id}` method="POST" style="display:inline;")
-              button.btn.btn-sm.btn-danger(type="submit") Delete
+
+            button.btn.btn-sm.btn-danger.deleteBtn(data-id=item.id) Delete
+
+    // ================= FOOTER =================
+    tfoot.bg-light
+      tr.text-center.fw-bold
+        td(colspan="2") Total 
+        td#totalLiters 0
+        td#totalAmount 0
+        td#avgPrice 0
+        td Avg Mileage
+        td#avgMileage 0
+        td -
+        td -
 
 
 // ================= ADD MODAL =================
@@ -98,7 +124,7 @@ style.
         h5.modal-title Fuel Entry
         button.btn-close(type="button" data-bs-dismiss="modal")
 
-      form(action="/" method="POST")
+      form#addForm
 
         .modal-body
 
@@ -145,7 +171,7 @@ each item in fuelEntries
           h5.modal-title Edit Fuel Entry
           button.btn-close(type="button" data-bs-dismiss="modal")
 
-        form(action=`/update/${item.id}` method="POST")
+        form.editForm(data-id=item.id)
 
           .modal-body
 
@@ -153,17 +179,10 @@ each item in fuelEntries
 
             .mb-2
               label Date
-              input.form-control.fuel-date(
+              input.form-control(
                 type="text"
                 name="date"
-                value=ed.toLocaleString('en-IN', {
-                  day:'2-digit',
-                  month:'2-digit',
-                  year:'numeric',
-                  hour:'2-digit',
-                  minute:'2-digit',
-                  hour12:true
-                })
+                value=ed.toISOString()
               )
 
             .mb-2
@@ -195,59 +214,27 @@ each item in fuelEntries
             button.btn.btn-primary(type="submit") Update
 
 
-// ================= JS =================
-script(src="https://code.jquery.com/jquery-3.7.1.min.js")
+
+// jQuery
+script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+
+// Bootstrap JS
 script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js")
+
+// DataTables Core
 script(src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js")
 script(src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js")
+
+// DataTables Buttons
 script(src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js")
-script(src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js")
+
+
+// JSZip (required for Excel)
 script(src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js")
+
+// HTML5 export buttons (Copy + Excel)
 script(src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js")
+
+// Flatpickr
 script(src="https://cdn.jsdelivr.net/npm/flatpickr")
-
-script.
-  $(function () {
-
-    let table = $('#fuelTable').DataTable({
-      pageLength: 20,
-      order: [[0,'desc']]
-    });
-
-    // ================= FILTER FIX =================
-    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex){
-
-      let start = $('#startDate').val();
-      let end = $('#endDate').val();
-
-      let rowDate = new Date($('#fuelTable tbody tr').eq(dataIndex).data('date'));
-
-      let startDate = start ? new Date(start) : null;
-      let endDate = end ? new Date(end) : null;
-
-      return (
-        (!startDate && !endDate) ||
-        (!startDate && rowDate <= endDate) ||
-        (startDate <= rowDate && !endDate) ||
-        (startDate <= rowDate && rowDate <= endDate)
-      );
-    });
-
-    $('#startDate, #endDate').on('change', function(){
-      table.draw();
-    });
-
-    // ================= FLATPICKR =================
-    flatpickr("#addFuelDate", {
-      enableTime: true,
-      dateFormat: "d/m/Y h:i K",
-      defaultDate: new Date()
-    });
-
-    flatpickr(".fuel-date", {
-      enableTime: true,
-      dateFormat: "d/m/Y h:i K",
-      allowInput: true
-    });
-
-  });
+script(src="/main.js")

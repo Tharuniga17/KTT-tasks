@@ -53,7 +53,7 @@ async function seedData() {
 
   await FuelEntry.bulkCreate(data);
 
-  console.log("🔥 50 dummy records inserted successfully!");
+  console.log("inserted successfully!");
   process.exit();
 }
 

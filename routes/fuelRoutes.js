@@ -1,7 +1,9 @@
 import express from "express";
 import FuelEntry from "../models/FuelEntry.js";
-
+import moment from "moment";
 const router = express.Router();
+
+
 
 router.get("/", async (req, res) => {
     try {
@@ -9,21 +11,22 @@ router.get("/", async (req, res) => {
             order: [["id", "ASC"]]
         });
 
-        const summaryResult = await FuelEntry.sequelize.query(`
-      SELECT 
-        COALESCE(SUM(liters::numeric), 0) AS total_liters,
-        COALESCE(SUM(amount::numeric), 0) AS total_amount,
-        COALESCE(AVG("pricePerLiter"::numeric), 0) AS avg_price
-      FROM "FuelEntries";
-    `, {
-            type: FuelEntry.sequelize.QueryTypes.SELECT
-        });
+        const total_liters = fuelEntries.reduce(
+            (sum, e) => sum + Number(e.liters || 0),
+            0
+        );
 
-        const summary = summaryResult[0];
+        const total_amount = fuelEntries.reduce(
+            (sum, e) => sum + Number(e.amount || 0),
+            0
+        );
+
+        const avg_price =
+            total_liters > 0 ? total_amount / total_liters : 0;
 
         res.render("fuel", {
             fuelEntries,
-            summary
+            summary: { total_liters, total_amount, avg_price }
         });
 
     } catch (err) {
@@ -32,57 +35,59 @@ router.get("/", async (req, res) => {
     }
 });
 
+
+
 router.post("/", async (req, res) => {
     try {
-
-        console.log("BODY:", req.body);
-
         await FuelEntry.create({
             date: req.body.date,
 
-            odometer: Number(req.body.odometer),
-            liters: Number(req.body.liters),
-            amount: Number(req.body.amount),
-            pricePerLiter: Number(req.body.pricePerLiter),
+            odometer: req.body.odometer === "" ? 0 : Number(req.body.odometer),
+            liters: req.body.liters === "" ? 0 : Number(req.body.liters),
+            amount: req.body.amount === "" ? 0 : Number(req.body.amount),
+            pricePerLiter: req.body.pricePerLiter === "" ? 0 : Number(req.body.pricePerLiter),
 
             mileage: req.body.mileage === "" ? null : Number(req.body.mileage),
 
             note: req.body.note || ""
         });
 
-        console.log("INSERT SUCCESS");
-        res.redirect("/");
+        res.json({ success: true, message: "Inserted successfully" });
 
     } catch (err) {
-        console.error("INSERT ERROR:", err);
-        res.status(500).send(err.message);
+        console.error(err);
+        res.status(500).json({ success: false, message: "Insert failed" });
     }
 });
 
-// ================= UPDATE =================
 router.post("/update/:id", async (req, res) => {
     try {
         await FuelEntry.update(
             {
                 date: req.body.date,
-                odometer: req.body.odometer,
-                liters: req.body.liters,
-                amount: req.body.amount,
-                pricePerLiter: req.body.pricePerLiter,
-                mileage: req.body.mileage,
-                note: req.body.note
+
+                odometer: req.body.odometer === "" ? 0 : Number(req.body.odometer),
+                liters: req.body.liters === "" ? 0 : Number(req.body.liters),
+                amount: req.body.amount === "" ? 0 : Number(req.body.amount),
+                pricePerLiter: req.body.pricePerLiter === "" ? 0 : Number(req.body.pricePerLiter),
+
+                mileage: req.body.mileage === "" ? null : Number(req.body.mileage),
+
+                note: req.body.note || ""
             },
             {
                 where: { id: req.params.id }
             }
         );
 
-        res.redirect("/");
+        res.json({ success: true, message: "Updated successfully" });
+
     } catch (err) {
-        console.log(err);
-        res.status(500).send("Update failed");
+        console.error(err);
+        res.status(500).json({ success: false, message: "Update failed" });
     }
 });
+
 
 router.post("/delete/:id", async (req, res) => {
     try {
@@ -90,11 +95,12 @@ router.post("/delete/:id", async (req, res) => {
             where: { id: req.params.id }
         });
 
-        res.redirect("/");
+        res.json({ success: true, message: "Deleted successfully" });
+
     } catch (err) {
-        console.log(err);
-        res.status(500).send("Delete failed");
+        console.error(err);
+        res.status(500).json({ success: false, message: "Delete failed" });
     }
 });
-
+console.log(typeof moment);
 export default router;
